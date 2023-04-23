@@ -26,7 +26,7 @@
 #![feature(async_fn_in_trait)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-pub use rtic_time::{Monotonic, TimeoutError, TimerQueue};
+pub use rtic_time::{Monotonic, Scheduler, TimeoutError, TimerQueue};
 
 #[cfg(feature = "cortex-m-systick")]
 pub mod systick;

@@ -24,7 +24,8 @@
 //! }
 //! ```
 
-use super::Monotonic;
+use super::{Monotonic, Scheduler};
+
 pub use super::{TimeoutError, TimerQueue};
 use core::future::Future;
 pub use fugit::{self, ExtU64};
@@ -66,10 +67,12 @@ impl Timer {
     pub fn __tq() -> &'static TimerQueue<Timer> {
         &TIMER_QUEUE
     }
+}
 
+impl Scheduler for Timer {
     /// Timeout at a specific time.
     #[inline]
-    pub async fn timeout_at<F: Future>(
+    async fn timeout_at<F: Future>(
         instant: <Self as Monotonic>::Instant,
         future: F,
     ) -> Result<F::Output, TimeoutError> {
@@ -78,7 +81,7 @@ impl Timer {
 
     /// Timeout after a specific duration.
     #[inline]
-    pub async fn timeout_after<F: Future>(
+    async fn timeout_after<F: Future>(
         duration: <Self as Monotonic>::Duration,
         future: F,
     ) -> Result<F::Output, TimeoutError> {
@@ -87,13 +90,13 @@ impl Timer {
 
     /// Delay for some duration of time.
     #[inline]
-    pub async fn delay(duration: <Self as Monotonic>::Duration) {
+    async fn delay(duration: <Self as Monotonic>::Duration) {
         TIMER_QUEUE.delay(duration).await;
     }
 
     /// Delay to some specific time instant.
     #[inline]
-    pub async fn delay_until(instant: <Self as Monotonic>::Instant) {
+    async fn delay_until(instant: <Self as Monotonic>::Instant) {
         TIMER_QUEUE.delay_until(instant).await;
     }
 }
@@ -152,16 +155,12 @@ impl Monotonic for Timer {
 
 #[cfg(feature = "embedded-hal-async")]
 impl embedded_hal_async::delay::DelayUs for Timer {
-    type Error = core::convert::Infallible;
-
-    async fn delay_us(&mut self, us: u32) -> Result<(), Self::Error> {
-        TIMER_QUEUE.delay((us as u64).micros()).await;
-        Ok(())
+    async fn delay_us(&mut self, us: u32) {
+        <Timer as Scheduler>::delay_us(us).await;
     }
 
-    async fn delay_ms(&mut self, ms: u32) -> Result<(), Self::Error> {
-        TIMER_QUEUE.delay((ms as u64).millis()).await;
-        Ok(())
+    async fn delay_ms(&mut self, ms: u32) {
+        <Timer as Scheduler>::delay_ms(ms).await;
     }
 }
 

@@ -19,9 +19,11 @@ use futures_util::{
 use linked_list::{Link, LinkedList};
 pub use monotonic::Monotonic;
 use rtic_common::dropper::OnDrop;
+pub use scheduler::{FromSubSeconds, Scheduler};
 
 mod linked_list;
 mod monotonic;
+mod scheduler;
 
 /// Holds a waker and at which time instant this waker shall be awoken.
 struct WaitingWaker<Mono: Monotonic> {
