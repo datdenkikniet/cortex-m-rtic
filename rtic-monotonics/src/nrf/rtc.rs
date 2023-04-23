@@ -40,7 +40,7 @@ use nrf5340_net_pac::{self as pac, Interrupt, RTC0_NS as RTC0, RTC1_NS as RTC1};
 #[cfg(feature = "nrf9160")]
 use nrf9160_pac::{self as pac, Interrupt, RTC0_NS as RTC0, RTC1_NS as RTC1};
 
-use crate::{Monotonic, Scheduler, TimeoutError, TimerQueue};
+use crate::{Monotonic, TimeoutError, TimerQueue};
 use atomic_polyfill::{AtomicU32, Ordering};
 use core::future::Future;
 pub use fugit::{self, ExtU64};
@@ -129,17 +129,16 @@ macro_rules! make_rtc {
             pub fn __tq() -> &'static TimerQueue<$mono_name> {
                 &$tq
             }
+
             #[inline(always)]
             fn is_overflow() -> bool {
                 let rtc = unsafe { &*$rtc::PTR };
                 rtc.events_ovrflw.read().bits() == 1
             }
-        }
 
-        impl Scheduler for $mono_name {
             /// Timeout at a specific time.
             #[inline]
-            async fn timeout_at<F: Future>(
+            pub async fn timeout_at<F: Future>(
                 instant: <Self as Monotonic>::Instant,
                 future: F,
             ) -> Result<F::Output, TimeoutError> {
@@ -148,7 +147,7 @@ macro_rules! make_rtc {
 
             /// Timeout after a specific duration.
             #[inline]
-            async fn timeout_after<F: Future>(
+            pub async fn timeout_after<F: Future>(
                 duration: <Self as Monotonic>::Duration,
                 future: F,
             ) -> Result<F::Output, TimeoutError> {
@@ -157,13 +156,13 @@ macro_rules! make_rtc {
 
             /// Delay for some duration of time.
             #[inline]
-            async fn delay(duration: <Self as Monotonic>::Duration) {
+            pub async fn delay(duration: <Self as Monotonic>::Duration) {
                 $tq.delay(duration).await;
             }
 
             /// Delay to some specific time instant.
             #[inline]
-            async fn delay_until(instant: <Self as Monotonic>::Instant) {
+            pub async fn delay_until(instant: <Self as Monotonic>::Instant) {
                 $tq.delay_until(instant).await;
             }
         }
@@ -172,12 +171,12 @@ macro_rules! make_rtc {
         impl embedded_hal_async::delay::DelayUs for $mono_name {
             #[inline]
             async fn delay_us(&mut self, us: u32) {
-                <Self as Scheduler>::delay_us(us).await;
+               Self::delay((us as u64).micros()).await;
             }
 
             #[inline]
             async fn delay_ms(&mut self, ms: u32) {
-                <Self as Scheduler>::delay_ms(ms).await;
+                Self::delay((ms as u64).millis()).await;
             }
         }
 

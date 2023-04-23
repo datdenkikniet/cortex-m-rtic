@@ -24,7 +24,7 @@
 //! }
 //! ```
 
-use super::{Monotonic, Scheduler};
+use super::Monotonic;
 
 pub use super::{TimeoutError, TimerQueue};
 use core::future::Future;
@@ -67,12 +67,10 @@ impl Timer {
     pub fn __tq() -> &'static TimerQueue<Timer> {
         &TIMER_QUEUE
     }
-}
 
-impl Scheduler for Timer {
     /// Timeout at a specific time.
     #[inline]
-    async fn timeout_at<F: Future>(
+    pub async fn timeout_at<F: Future>(
         instant: <Self as Monotonic>::Instant,
         future: F,
     ) -> Result<F::Output, TimeoutError> {
@@ -81,7 +79,7 @@ impl Scheduler for Timer {
 
     /// Timeout after a specific duration.
     #[inline]
-    async fn timeout_after<F: Future>(
+    pub async fn timeout_after<F: Future>(
         duration: <Self as Monotonic>::Duration,
         future: F,
     ) -> Result<F::Output, TimeoutError> {
@@ -90,13 +88,13 @@ impl Scheduler for Timer {
 
     /// Delay for some duration of time.
     #[inline]
-    async fn delay(duration: <Self as Monotonic>::Duration) {
+    pub async fn delay(duration: <Self as Monotonic>::Duration) {
         TIMER_QUEUE.delay(duration).await;
     }
 
     /// Delay to some specific time instant.
     #[inline]
-    async fn delay_until(instant: <Self as Monotonic>::Instant) {
+    pub async fn delay_until(instant: <Self as Monotonic>::Instant) {
         TIMER_QUEUE.delay_until(instant).await;
     }
 }
@@ -156,11 +154,11 @@ impl Monotonic for Timer {
 #[cfg(feature = "embedded-hal-async")]
 impl embedded_hal_async::delay::DelayUs for Timer {
     async fn delay_us(&mut self, us: u32) {
-        <Timer as Scheduler>::delay_us(us).await;
+        Self::delay((us as u64).micros()).await;
     }
 
     async fn delay_ms(&mut self, ms: u32) {
-        <Timer as Scheduler>::delay_ms(ms).await;
+        Self::delay((ms as u64).millis()).await;
     }
 }
 
