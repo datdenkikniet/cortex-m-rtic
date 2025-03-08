@@ -326,7 +326,7 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
 
             //  Do all this in one critical section, else there can be race conditions
             let queue_idx = critical_section::with(|cs| {
-                println!("Entered critical section");
+                println!("Send poll: Entered critical section");
                 let wq_empty = self.0.wait_queue.is_empty();
                 let fq_empty = self.0.access(cs).freeq.is_empty();
                 if !wq_empty || fq_empty {
@@ -334,12 +334,15 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
                     // which happens outside this `poll_fn`'s stack frame.
                     let link = unsafe { link_ptr.get() };
                     if let Some(link) = link {
-                        if !link.is_popped() {
+                        let popped = link.is_popped();
+                        println!("Popped: {}", popped);
+                        if !popped {
                             return None;
                         } else {
                             // Fall through to dequeue
                         }
                     } else {
+                        println!("Link ref insert");
                         // Place the link in the wait queue on first run.
                         let link_ref = link.insert(Link::new(cx.waker().clone()));
 
@@ -356,10 +359,11 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
                 }
 
                 println!(
-                    "Send check: wq_empty: {wq_empty}. freeq_full: {}, freeq_empty: {}, empty: {}",
+                    "Send check: wq_empty: {wq_empty}. freeq_full: {}, freeq_empty: {}, empty: {}, link_is_some: {}",
                     self.0.access(cs).freeq.is_full(),
                     self.0.access(cs).freeq.is_empty(),
-                    fq_empty
+                    fq_empty,
+                    unsafe { link_ptr.get().is_some() } ,
                 );
 
                 assert!(!self.0.access(cs).freeq.is_empty());
@@ -459,7 +463,7 @@ pub enum ReceiveError {
 impl<'a, T, const N: usize> Receiver<'a, T, N> {
     /// Receives a value if there is one in the channel, non-blocking.
     pub fn try_recv(&mut self) -> Result<T, ReceiveError> {
-        println!("Popping ready slot");
+        println!("Popping ready slot.");
         // Try to get a ready slot.
         let ready_slot = critical_section::with(|cs| self.0.access(cs).readyq.pop_front());
 

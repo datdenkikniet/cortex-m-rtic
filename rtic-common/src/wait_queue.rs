@@ -23,7 +23,8 @@ pub type WaitQueue = DoublyLinkedList<Waker>;
 /// but it will not deadlock.
 #[derive(Debug)]
 pub struct DoublyLinkedList<T> {
-    head: AtomicPtr<Link<T>>, // UnsafeCell<*mut Link<T>>
+    #[allow(missing_docs)]
+    pub head: AtomicPtr<Link<T>>, // UnsafeCell<*mut Link<T>>
     tail: AtomicPtr<Link<T>>,
 }
 
@@ -53,6 +54,8 @@ impl<T: Clone> DoublyLinkedList<T> {
     /// Pop the first element in the queue.
     pub fn pop(&self) -> Option<T> {
         cs::with(|_| {
+            println!("Wait queue pop");
+
             // Make sure all previous writes are visible
             core::sync::atomic::fence(Ordering::SeqCst);
 
@@ -101,6 +104,8 @@ impl<T: Clone> DoublyLinkedList<T> {
     /// The link must live until it is removed from the queue.
     pub unsafe fn push(&self, link: Pin<&Link<T>>) {
         cs::with(|_| {
+            println!("Wait queue push");
+
             // Make sure all previous writes are visible
             core::sync::atomic::fence(Ordering::SeqCst);
 
