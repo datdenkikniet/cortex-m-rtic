@@ -327,8 +327,18 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
             //  Do all this in one critical section, else there can be race conditions
             let queue_idx = critical_section::with(|cs| {
                 println!("Send poll: Entered critical section");
+
                 let wq_empty = self.0.wait_queue.is_empty();
                 let fq_empty = self.0.access(cs).freeq.is_empty();
+
+                println!(
+                    "Send check: wq_empty: {wq_empty}. empty: {}, link_is_some: {}, freeq: {:?}, readyq: {:?}",
+                    fq_empty,
+                    unsafe { link_ptr.get() }.is_some(),
+                    self.0.access(cs).freeq,
+                    self.0.access(cs).readyq
+                );
+
                 if !wq_empty || fq_empty {
                     // SAFETY: This pointer is only dereferenced here and on drop of the future
                     // which happens outside this `poll_fn`'s stack frame.
@@ -354,17 +364,11 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
                         // `link_ptr` lives until the end of the stack frame.
                         unsafe { self.0.wait_queue.push(Pin::new_unchecked(link_ref)) };
 
+                        println!("Wait queue push complete");
+
                         return None;
                     }
                 }
-
-                println!(
-                    "Send check: wq_empty: {wq_empty}. freeq_full: {}, freeq_empty: {}, empty: {}, link_is_some: {}",
-                    self.0.access(cs).freeq.is_full(),
-                    self.0.access(cs).freeq.is_empty(),
-                    fq_empty,
-                    unsafe { link_ptr.get().is_some() } ,
-                );
 
                 assert!(!self.0.access(cs).freeq.is_empty());
                 // Get index as the queue is guaranteed not empty and the wait queue is empty
