@@ -90,7 +90,7 @@ Done sending
 TRACE iter{1}:thread{id=0}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(5) seq_cst=true spurious=false
 TRACE iter{1}:thread{id=0}: loom::rt: spawn thread=Id(1)
 TRACE iter{1}:thread{id=0}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(6) seq_cst=false spurious=true
-TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(7) location=rtic-sync/src/channel.rs:599:13
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(7) location=rtic-sync/src/channel.rs:609:13
 TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
 TRACE iter{1}:thread{id=0}: loom::rt: synchronize
 Acquiring CS. false
@@ -146,9 +146,9 @@ TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loo
  INFO iter{1}:thread{id=1}: loom::rt::execution: ~~~~~~~~ THREAD 1 ~~~~~~~~
 TRACE iter{1}:thread{id=1}: loom::rt: branch switch=true
 TRACE iter{1}:thread{id=1}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(8) seq_cst=false spurious=true
-TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(9) location=rtic-sync/src/channel.rs:593:17
+TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(9) location=rtic-sync/src/channel.rs:603:17
 Start sending
-Link ptr: 0x7f714e5ca510
+Link ptr: 0x7fe5ba193510
 Sending poll
 TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
 TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::try_with
@@ -181,7 +181,7 @@ TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom
 TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=1}: loom::rt: synchronize
 TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
-Send check: wq_empty: true. freeq_full: true, freeq_empty: false, empty: false, link_is_some: false
+Send check: wq_empty: true. empty: false, link_is_some: false, freeq: [0], readyq: []
 Releasing CS (nested: false)
 TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
 TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
@@ -225,9 +225,9 @@ TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom
 TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::ref_dec state=Ref<loom::rt::arc::State>(9) ref_cnt=0 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:523:1
 TRACE iter{1}:thread{id=1}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(11) seq_cst=false spurious=true
-TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(12) location=rtic-sync/src/channel.rs:595:17
+TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(12) location=rtic-sync/src/channel.rs:605:17
 Start sending
-Link ptr: 0x7f714e5ca510
+Link ptr: 0x7fe5ba193510
 Sending poll
 TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
 TRACE iter{1}:thread{id=1}: loom::rt: synchronize
@@ -258,6 +258,7 @@ TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom
 TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=1}: loom::rt: synchronize
 TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+Send check: wq_empty: true. empty: true, link_is_some: false, freeq: [], readyq: [0]
 Link ref insert
 TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(12) action=RefInc
 TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
@@ -284,6 +285,7 @@ TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=1}: loom::rt: synchronize
 TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::store state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
 Releasing CS (nested: true)
+Wait queue push complete
 Releasing CS (nested: false)
 TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
 TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
@@ -298,7 +300,7 @@ TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom
 TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=0}: loom::rt: synchronize
 TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
-Head pointer: 0x7f714e5ca510
+Head pointer: 0x7fe5ba193510
 TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(13) action=Load
 TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=0}: loom::rt: synchronize
@@ -315,7 +317,7 @@ TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom
 TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=0}: loom::rt: synchronize
 TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(2) ordering=Relaxed
-Tail: 0x7f714e5ca510
+Tail: 0x7fe5ba193510
 TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(2) action=Store
 TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=0}: loom::rt: synchronize
@@ -341,6 +343,9 @@ Releasing CS (nested: false)
 TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
 TRACE iter{1}:thread{id=0}: loom::rt: synchronize
 Popped wait queue.
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::unsync_load state=Ref<loom::rt::atomic::State>(1)
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::unsync_load state=Ref<loom::rt::atomic::State>(2)
+Wait queue ptrs: 0x0, 0x0, true
 TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::notify::State>(11) action=Opaque
 TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=0}: loom::rt::notify: Notify::notify state=Ref<loom::rt::notify::State>(11) thread=Id(1)
@@ -353,7 +358,7 @@ TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom
 TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::ref_dec state=Ref<loom::rt::arc::State>(7) ref_cnt=0 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:523:1
 TRACE iter{1}:thread{id=0}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(16) seq_cst=false spurious=true
-TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(17) location=rtic-sync/src/channel.rs:602:13
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(17) location=rtic-sync/src/channel.rs:612:13
 TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
 TRACE iter{1}:thread{id=0}: loom::rt: synchronize
 Acquiring CS. false
@@ -424,14 +429,14 @@ TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom
 TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=1}: loom::rt: synchronize
 TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+Send check: wq_empty: true. empty: true, link_is_some: true, freeq: [], readyq: []
 TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(15) action=Load
 TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
 TRACE iter{1}:thread{id=1}: loom::rt: synchronize
 TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(15) ordering=Relaxed
 Popped: true
-Send check: wq_empty: true. freeq_full: false, freeq_empty: true, empty: true, link_is_some: true
 
-thread 'channel::loom_tests::a_repro' panicked at rtic-sync/src/channel.rs:369:17:
+thread 'channel::loom_tests::a_repro' panicked at rtic-sync/src/channel.rs:373:17:
 assertion failed: !self.0.access(cs).freeq.is_empty()
 stack backtrace:
    0: rust_begin_unwind
@@ -441,7 +446,7 @@ stack backtrace:
    2: core::panicking::panic
              at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:145:5
    3: rtic_sync::channel::Sender<T,_>::send::{{closure}}::{{closure}}::{{closure}}
-             at ./src/channel.rs:369:17
+             at ./src/channel.rs:373:17
    4: critical_section::with
              at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/critical-section-1.1.2/src/lib.rs:229:14
    5: rtic_sync::channel::Sender<T,_>::send::{{closure}}::{{closure}}
@@ -449,11 +454,11 @@ stack backtrace:
    6: <core::future::poll_fn::PollFn<F> as core::future::future::Future>::poll
              at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/future/poll_fn.rs:151:9
    7: rtic_sync::channel::Sender<T,_>::send::{{closure}}
-             at ./src/channel.rs:383:10
+             at ./src/channel.rs:387:10
    8: loom::future::block_on
              at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/future/mod.rs:35:15
    9: rtic_sync::channel::loom_tests::a_repro::{{closure}}::{{closure}}
-             at ./src/channel.rs:595:17
+             at ./src/channel.rs:605:17
   10: loom::thread::spawn_internal::{{closure}}
              at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/thread.rs:168:47
   11: loom::rt::spawn::{{closure}}
@@ -507,110 +512,110 @@ TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom:
 thread 'channel::loom_tests::a_repro' panicked at rtic-common/src/loom_cs.rs:35:44:
 called `Result::unwrap()` on an `Err` value: PoisonError { .. }
 stack backtrace:
-   0:     0x555b22612cea - std::backtrace_rs::backtrace::libunwind::trace::h88deb10bd0145eb8
+   0:     0x562d2a23323a - std::backtrace_rs::backtrace::libunwind::trace::h88deb10bd0145eb8
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/../../backtrace/src/backtrace/libunwind.rs:116:5
-   1:     0x555b22612cea - std::backtrace_rs::backtrace::trace_unsynchronized::he1036f5481c14dff
+   1:     0x562d2a23323a - std::backtrace_rs::backtrace::trace_unsynchronized::he1036f5481c14dff
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
-   2:     0x555b22612cea - std::sys::backtrace::_print_fmt::hecc345b6e70c4b20
+   2:     0x562d2a23323a - std::sys::backtrace::_print_fmt::hecc345b6e70c4b20
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/sys/backtrace.rs:66:9
-   3:     0x555b22612cea - <std::sys::backtrace::BacktraceLock::print::DisplayBacktrace as core::fmt::Display>::fmt::he089f96442833f67
+   3:     0x562d2a23323a - <std::sys::backtrace::BacktraceLock::print::DisplayBacktrace as core::fmt::Display>::fmt::he089f96442833f67
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/sys/backtrace.rs:39:26
-   4:     0x555b2263a603 - core::fmt::rt::Argument::fmt::h1f77cded99c71a14
+   4:     0x562d2a25ab53 - core::fmt::rt::Argument::fmt::h1f77cded99c71a14
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/fmt/rt.rs:177:76
-   5:     0x555b2263a603 - core::fmt::write::h2f210ed4c94745cb
+   5:     0x562d2a25ab53 - core::fmt::write::h2f210ed4c94745cb
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/fmt/mod.rs:1440:21
-   6:     0x555b2260fad3 - std::io::Write::write_fmt::h7de08171ab770fb2
+   6:     0x562d2a230023 - std::io::Write::write_fmt::h7de08171ab770fb2
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/io/mod.rs:1887:15
-   7:     0x555b22612b32 - std::sys::backtrace::BacktraceLock::print::h810fbd31421329e6
+   7:     0x562d2a233082 - std::sys::backtrace::BacktraceLock::print::h810fbd31421329e6
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/sys/backtrace.rs:42:9
-   8:     0x555b22614220 - std::panicking::default_hook::{{closure}}::hbaad47ed9dc6356d
+   8:     0x562d2a234770 - std::panicking::default_hook::{{closure}}::hbaad47ed9dc6356d
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:295:22
-   9:     0x555b22614000 - std::panicking::default_hook::h24e207139139d40a
+   9:     0x562d2a234550 - std::panicking::default_hook::h24e207139139d40a
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:322:9
-  10:     0x555b225cec13 - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::hbb6e385849f943e5
+  10:     0x562d2a1ef163 - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::hbb6e385849f943e5
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/boxed.rs:2007:9
-  11:     0x555b225cf1a2 - generator::detail::gen::catch_unwind_filter::{{closure}}::{{closure}}::hbc5db465dbec9a0b
+  11:     0x562d2a1ef6f2 - generator::detail::gen::catch_unwind_filter::{{closure}}::{{closure}}::hbc5db465dbec9a0b
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:19:13
-  12:     0x555b22614a53 - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::h3af32c23caf5c679
+  12:     0x562d2a234fa3 - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::h3af32c23caf5c679
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/alloc/src/boxed.rs:2007:9
-  13:     0x555b22614a53 - std::panicking::rust_panic_with_hook::ha9131beeb2ddc506
+  13:     0x562d2a234fa3 - std::panicking::rust_panic_with_hook::ha9131beeb2ddc506
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:836:13
-  14:     0x555b2261472a - std::panicking::begin_panic_handler::{{closure}}::h1bba0eaeb6da506f
+  14:     0x562d2a234c7a - std::panicking::begin_panic_handler::{{closure}}::h1bba0eaeb6da506f
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:701:13
-  15:     0x555b226131e9 - std::sys::backtrace::__rust_end_short_backtrace::h1d1ca3eade483f4c
+  15:     0x562d2a233739 - std::sys::backtrace::__rust_end_short_backtrace::h1d1ca3eade483f4c
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/sys/backtrace.rs:168:18
-  16:     0x555b226143bd - rust_begin_unwind
+  16:     0x562d2a23490d - rust_begin_unwind
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:692:5
-  17:     0x555b222d7de0 - core::panicking::panic_fmt::h896a0727a1a943f9
+  17:     0x562d29ef6de0 - core::panicking::panic_fmt::h896a0727a1a943f9
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:75:14
-  18:     0x555b222d8256 - core::result::unwrap_failed::h1b5ed8541c7bebd6
+  18:     0x562d29ef7256 - core::result::unwrap_failed::h1b5ed8541c7bebd6
                                at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/result.rs:1704:5
-  19:     0x555b223462c3 - core::result::Result<T,E>::unwrap::hca02d86e9878b64d
+  19:     0x562d29f663a3 - core::result::Result<T,E>::unwrap::hca02d86e9878b64d
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1109:23
-  20:     0x555b223462c3 - loom::sync::mutex::Mutex<T>::lock::h7083de49ea7c2969
+  20:     0x562d29f663a3 - loom::sync::mutex::Mutex<T>::lock::h7083de49ea7c2969
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/sync/mutex.rs:43:24
-  21:     0x555b22346470 - <rtic_common::loom_cs::StdCriticalSection as critical_section::Impl>::acquire::{{closure}}::hf8a9ae28a4cee61b
+  21:     0x562d29f66550 - <rtic_common::loom_cs::StdCriticalSection as critical_section::Impl>::acquire::{{closure}}::hf8a9ae28a4cee61b
                                at /home/jona/projects/rtic/rtic-common/src/loom_cs.rs:35:31
-  22:     0x555b22344d8c - loom::thread::LocalKey<T>::try_with::hbc67081b15958d9c
+  22:     0x562d29f64e6c - loom::thread::LocalKey<T>::try_with::hbc67081b15958d9c
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/thread.rs:280:12
-  23:     0x555b2234494f - loom::thread::LocalKey<T>::with::hcd623f4a6a907666
+  23:     0x562d29f64a2f - loom::thread::LocalKey<T>::with::hcd623f4a6a907666
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/thread.rs:256:9
-  24:     0x555b2233e25e - <rtic_common::loom_cs::StdCriticalSection as critical_section::Impl>::acquire::hc61f8bb602394268
+  24:     0x562d29f5e33e - <rtic_common::loom_cs::StdCriticalSection as critical_section::Impl>::acquire::hc61f8bb602394268
                                at /home/jona/projects/rtic/rtic-common/src/loom_cs.rs:21:9
-  25:     0x555b2233e447 - _critical_section_1_0_acquire
+  25:     0x562d29f5e527 - _critical_section_1_0_acquire
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/critical-section-1.1.2/src/lib.rs:282:13
-  26:     0x555b222e6af0 - critical_section::acquire::h26686b4649f61f06
+  26:     0x562d29f06700 - critical_section::acquire::h26686b4649f61f06
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/critical-section-1.1.2/src/lib.rs:183:18
-  27:     0x555b222e6af0 - critical_section::with::h235ee56a4e023e2b
+  27:     0x562d29f06700 - critical_section::with::hf3da673f94675849
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/critical-section-1.1.2/src/lib.rs:226:26
-  28:     0x555b222f8163 - rtic_common::wait_queue::Link<T>::remove_from_list::h30fb7a8ec14a7d20
+  28:     0x562d29f18243 - rtic_common::wait_queue::Link<T>::remove_from_list::h57b9977ccc352923
                                at /home/jona/projects/rtic/rtic-common/src/wait_queue.rs:179:9
-  29:     0x555b222dd6d9 - rtic_sync::channel::Sender<T,_>::send::{{closure}}::{{closure}}::h5ab51650db462a58
+  29:     0x562d29efc6d9 - rtic_sync::channel::Sender<T,_>::send::{{closure}}::{{closure}}::h5ab51650db462a58
                                at /home/jona/projects/rtic/rtic-sync/src/channel.rs:316:17
-  30:     0x555b222ebb8e - <rtic_common::dropper::OnDrop<F> as core::ops::drop::Drop>::drop::ha040c44f9da42897
+  30:     0x562d29f0b60e - <rtic_common::dropper::OnDrop<F> as core::ops::drop::Drop>::drop::ha040c44f9da42897
                                at /home/jona/projects/rtic/rtic-common/src/dropper.rs:24:18
-  31:     0x555b222eaeda - core::ptr::drop_in_place<rtic_common::dropper::OnDrop<rtic_sync::channel::Sender<[u8; 20],1_usize>::send::{{closure}}::{{closure}}>>::hdfbeb4a673a07fff
+  31:     0x562d29f0a95a - core::ptr::drop_in_place<rtic_common::dropper::OnDrop<rtic_sync::channel::Sender<[u8; 20],1_usize>::send::{{closure}}::{{closure}}>>::hdfbeb4a673a07fff
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:523:1
-  32:     0x555b222dd648 - rtic_sync::channel::Sender<T,_>::send::{{closure}}::h061c2c87937ae4a6
-                               at /home/jona/projects/rtic/rtic-sync/src/channel.rs:395:5
-  33:     0x555b222f9984 - loom::future::block_on::ha0eb5f5b272efa95
+  32:     0x562d29efc648 - rtic_sync::channel::Sender<T,_>::send::{{closure}}::h061c2c87937ae4a6
+                               at /home/jona/projects/rtic/rtic-sync/src/channel.rs:399:5
+  33:     0x562d29f19a64 - loom::future::block_on::ha0eb5f5b272efa95
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/future/mod.rs:35:15
-  34:     0x555b222f3179 - rtic_sync::channel::loom_tests::a_repro::{{closure}}::{{closure}}::hdd1a21a2fa256bea
-                               at /home/jona/projects/rtic/rtic-sync/src/channel.rs:595:17
-  35:     0x555b222e40d0 - loom::thread::spawn_internal::{{closure}}::h6d725362ce254480
+  34:     0x562d29f13259 - rtic_sync::channel::loom_tests::a_repro::{{closure}}::{{closure}}::hdd1a21a2fa256bea
+                               at /home/jona/projects/rtic/rtic-sync/src/channel.rs:605:17
+  35:     0x562d29f03230 - loom::thread::spawn_internal::{{closure}}::h6d725362ce254480
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/thread.rs:168:47
-  36:     0x555b222edefc - loom::rt::spawn::{{closure}}::h5c2f83cd2c1d3bb4
+  36:     0x562d29f0d97c - loom::rt::spawn::{{closure}}::h5c2f83cd2c1d3bb4
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/rt/mod.rs:78:13
-  37:     0x555b222ea98e - core::ops::function::FnOnce::call_once{{vtable.shim}}::h03200ccdce94a1ef
+  37:     0x562d29f0a40e - core::ops::function::FnOnce::call_once{{vtable.shim}}::h03200ccdce94a1ef
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
-  38:     0x555b22375e28 - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::h9ee30823f6f06bd9
+  38:     0x562d29f96378 - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::h9ee30823f6f06bd9
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/boxed.rs:1993:9
-  39:     0x555b223535c9 - loom::rt::scheduler::spawn_thread::{{closure}}::h2064432b3e871336
+  39:     0x562d29f73b19 - loom::rt::scheduler::spawn_thread::{{closure}}::h2064432b3e871336
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/rt/scheduler.rs:142:17
-  40:     0x555b2237c02e - core::ops::function::FnOnce::call_once::h4163d008bbb31ccb
+  40:     0x562d29f9c57e - core::ops::function::FnOnce::call_once::h4163d008bbb31ccb
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
-  41:     0x555b2237a8ff - generator::gen_impl::GeneratorImpl<A,T>::init_code::{{closure}}::hd869930e49d6d1b6
+  41:     0x562d29f9ae4f - generator::gen_impl::GeneratorImpl<A,T>::init_code::{{closure}}::hd869930e49d6d1b6
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/gen_impl.rs:357:21
-  42:     0x555b22386591 - generator::stack::StackBox<F>::call_once::h18cef3f3e587df48
+  42:     0x562d29fa6ae1 - generator::stack::StackBox<F>::call_once::h18cef3f3e587df48
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/stack/mod.rs:137:13
-  43:     0x555b225d09bd - generator::stack::Func::call_once::h842c4d852216e38f
+  43:     0x562d2a1f0f0d - generator::stack::Func::call_once::h842c4d852216e38f
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/stack/mod.rs:119:9
-  44:     0x555b225cf2fc - generator::detail::gen::gen_init_impl::{{closure}}::h17e991055ffeaafa
+  44:     0x562d2a1ef84c - generator::detail::gen::gen_init_impl::{{closure}}::h17e991055ffeaafa
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:35:9
-  45:     0x555b225cc8a3 - core::ops::function::FnOnce::call_once::hcd6ed86177c82cd9
+  45:     0x562d2a1ecdf3 - core::ops::function::FnOnce::call_once::hcd6ed86177c82cd9
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
-  46:     0x555b225cbdff - std::panicking::try::do_call::h3e2ef31d7886675a
+  46:     0x562d2a1ec34f - std::panicking::try::do_call::h3e2ef31d7886675a
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panicking.rs:584:40
-  47:     0x555b225d158b - __rust_try
-  48:     0x555b225cbaa0 - std::panicking::try::ha19239bbd81c6b57
+  47:     0x562d2a1f1adb - __rust_try
+  48:     0x562d2a1ebff0 - std::panicking::try::ha19239bbd81c6b57
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panicking.rs:547:19
-  49:     0x555b225cbaa0 - std::panic::catch_unwind::h8267862a8f123643
+  49:     0x562d2a1ebff0 - std::panic::catch_unwind::h8267862a8f123643
                                at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panic.rs:358:14
-  50:     0x555b225cf06d - generator::detail::gen::catch_unwind_filter::h370b30ac7dabdd5f
+  50:     0x562d2a1ef5bd - generator::detail::gen::catch_unwind_filter::h370b30ac7dabdd5f
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:23:5
-  51:     0x555b225cf1e4 - generator::detail::gen::gen_init_impl::hbf8c022de77d9040
+  51:     0x562d2a1ef734 - generator::detail::gen::gen_init_impl::hbf8c022de77d9040
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:50:25
-  52:     0x555b225cee93 - generator::detail::asm::gen_init::h094f18dd176af6c6
+  52:     0x562d2a1ef3e3 - generator::detail::asm::gen_init::h094f18dd176af6c6
                                at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/x86_64_unix.rs:8:5
   53:                0x0 - <unknown>
 

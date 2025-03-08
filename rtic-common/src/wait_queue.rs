@@ -21,11 +21,11 @@ pub type WaitQueue = DoublyLinkedList<Waker>;
 ///
 /// Atomicity is guaranteed by short [`critical_section`]s, so this list is _not_ lock free,
 /// but it will not deadlock.
+#[allow(missing_docs)]
 #[derive(Debug)]
 pub struct DoublyLinkedList<T> {
-    #[allow(missing_docs)]
     pub head: AtomicPtr<Link<T>>, // UnsafeCell<*mut Link<T>>
-    tail: AtomicPtr<Link<T>>,
+    pub tail: AtomicPtr<Link<T>>,
 }
 
 impl<T> DoublyLinkedList<T> {
@@ -104,10 +104,10 @@ impl<T: Clone> DoublyLinkedList<T> {
     /// The link must live until it is removed from the queue.
     pub unsafe fn push(&self, link: Pin<&Link<T>>) {
         cs::with(|_| {
-            println!("Wait queue push");
-
             // Make sure all previous writes are visible
             core::sync::atomic::fence(Ordering::SeqCst);
+
+            println!("Wait queue push");
 
             let tail = self.tail.load(Self::R);
 
