@@ -21,6 +21,7 @@ pub type WaitQueue = DoublyLinkedList<Waker>;
 ///
 /// Atomicity is guaranteed by short [`critical_section`]s, so this list is _not_ lock free,
 /// but it will not deadlock.
+#[derive(Debug)]
 pub struct DoublyLinkedList<T> {
     head: AtomicPtr<Link<T>>, // UnsafeCell<*mut Link<T>>
     tail: AtomicPtr<Link<T>>,
@@ -57,15 +58,20 @@ impl<T: Clone> DoublyLinkedList<T> {
 
             let head = self.head.load(Self::R);
 
+            println!("Head pointer: {:p}", head);
+
             // SAFETY: `as_ref` is safe as `insert` requires a valid reference to a link
             if let Some(head_ref) = unsafe { head.as_ref() } {
+                let next = head_ref.next.load(Self::R);
+                println!("Head ref next: {:?}. Value: {:p}", head_ref.next, next);
                 // Move head to the next element
-                self.head.store(head_ref.next.load(Self::R), Self::R);
+                self.head.store(next, Self::R);
 
                 // We read the value at head
                 let head_val = head_ref.val.clone();
 
                 let tail = self.tail.load(Self::R);
+                println!("Tail: {:p}", tail);
                 if head == tail {
                     // The queue is empty
                     self.tail.store(null_mut(), Self::R);
@@ -79,6 +85,7 @@ impl<T: Clone> DoublyLinkedList<T> {
                 head_ref.next.store(null_mut(), Self::R);
                 head_ref.prev.store(null_mut(), Self::R);
                 head_ref.is_popped.store(true, Self::R);
+                println!("Head ref popped value: {:?}", head_ref.is_popped);
 
                 return Some(head_val);
             }

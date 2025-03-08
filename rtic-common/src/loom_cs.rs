@@ -19,8 +19,10 @@ unsafe impl critical_section::Impl for StdCriticalSection {
     unsafe fn acquire() -> bool {
         // Allow reentrancy by checking thread local state
         IS_LOCKED.with(|l| {
+            println!("Acquiring CS. {}", l.get());
             if l.get() {
                 // CS already acquired in the current thread.
+                println!("Acquired CS (nested)");
                 return true;
             }
 
@@ -38,6 +40,9 @@ unsafe impl critical_section::Impl for StdCriticalSection {
                     err.into_inner()
                 }
             };
+
+            println!("Acquired CS");
+
             GLOBAL_GUARD.borrow_mut().write(guard);
 
             false
@@ -45,6 +50,7 @@ unsafe impl critical_section::Impl for StdCriticalSection {
     }
 
     unsafe fn release(nested_cs: bool) {
+        println!("Releasing CS (nested: {nested_cs})");
         if !nested_cs {
             // SAFETY: As per the acquire/release safety contract, release can only be called
             // if the critical section is acquired in the current thread,

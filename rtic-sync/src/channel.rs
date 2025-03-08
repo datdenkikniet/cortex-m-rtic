@@ -43,6 +43,20 @@ pub struct Channel<T, const N: usize> {
     num_senders: UnsafeCell<usize>,
 }
 
+impl<T: std::fmt::Debug, const N: usize> std::fmt::Debug for Channel<T, N> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // SAFETY: not :)
+        f.debug_struct("Channel")
+            .field("freeq", unsafe { &*self.freeq.get() })
+            .field("readyq", unsafe { &*self.readyq.get() })
+            .field("slots", &self.slots)
+            .field("wait_queue", &self.wait_queue)
+            .field("receiver_dropped", unsafe { &*self.receiver_dropped.get() })
+            .field("num_senders", unsafe { &*self.num_senders.get() })
+            .finish()
+    }
+}
+
 unsafe impl<T, const N: usize> Send for Channel<T, N> {}
 
 unsafe impl<T, const N: usize> Sync for Channel<T, N> {}
@@ -208,6 +222,10 @@ impl LinkPtr {
     unsafe fn get(&mut self) -> &mut Option<Link<Waker>> {
         &mut *self.0
     }
+
+    fn ptr(&self) -> *mut Option<Link<Waker>> {
+        self.0
+    }
 }
 
 unsafe impl Send for LinkPtr {}
@@ -248,6 +266,8 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
 
         // If there is a receiver waker, wake it.
         self.0.receiver_waker.wake();
+
+        println!("Done sending");
     }
 
     /// Try to send a value, non-blocking. If the channel is full this will return an error.
@@ -277,11 +297,15 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
     /// Send a value. If there is no place left in the queue this will wait until there is.
     /// If the receiver does not exist this will return an error.
     pub async fn send(&mut self, val: T) -> Result<(), NoReceiver<T>> {
+        println!("Start sending");
+
         let mut link_ptr: Option<Link<Waker>> = None;
 
         // Make this future `Drop`-safe.
         // SAFETY(link_ptr): Shadow the original definition of `link_ptr` so we can't abuse it.
         let mut link_ptr = LinkPtr(&mut link_ptr as *mut Option<Link<Waker>>);
+
+        println!("Link ptr: {:p}", link_ptr.ptr());
 
         let mut link_ptr2 = link_ptr.clone();
         let dropper = OnDrop::new(|| {
@@ -294,12 +318,15 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
         });
 
         let idx = poll_fn(|cx| {
+            println!("Sending poll");
+
             if self.is_closed() {
                 return Poll::Ready(Err(()));
             }
 
             //  Do all this in one critical section, else there can be race conditions
             let queue_idx = critical_section::with(|cs| {
+                println!("Entered critical section");
                 let wq_empty = self.0.wait_queue.is_empty();
                 let fq_empty = self.0.access(cs).freeq.is_empty();
                 if !wq_empty || fq_empty {
@@ -327,6 +354,13 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
                         return None;
                     }
                 }
+
+                println!(
+                    "Send check: wq_empty: {wq_empty}. freeq_full: {}, freeq_empty: {}, empty: {}",
+                    self.0.access(cs).freeq.is_full(),
+                    self.0.access(cs).freeq.is_empty(),
+                    fq_empty
+                );
 
                 assert!(!self.0.access(cs).freeq.is_empty());
                 // Get index as the queue is guaranteed not empty and the wait queue is empty
@@ -400,15 +434,10 @@ impl<'a, T, const N: usize> Clone for Sender<'a, T, N> {
 // -------- Receiver
 
 /// A receiver of the channel. There can only be one receiver at any time.
+#[derive(Debug)]
 pub struct Receiver<'a, T, const N: usize>(&'a Channel<T, N>);
 
 unsafe impl<'a, T, const N: usize> Send for Receiver<'a, T, N> {}
-
-impl<'a, T, const N: usize> core::fmt::Debug for Receiver<'a, T, N> {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
-        write!(f, "Receiver")
-    }
-}
 
 #[cfg(feature = "defmt-03")]
 impl<'a, T, const N: usize> defmt::Format for Receiver<'a, T, N> {
@@ -430,26 +459,39 @@ pub enum ReceiveError {
 impl<'a, T, const N: usize> Receiver<'a, T, N> {
     /// Receives a value if there is one in the channel, non-blocking.
     pub fn try_recv(&mut self) -> Result<T, ReceiveError> {
+        println!("Popping ready slot");
         // Try to get a ready slot.
         let ready_slot = critical_section::with(|cs| self.0.access(cs).readyq.pop_front());
 
         if let Some(rs) = ready_slot {
+            println!("Found ready slot");
+
             // Read the value from the slots, note; this memcpy is not under a critical section.
             let r = unsafe { ptr::read(self.0.slots.get_unchecked(rs as usize).get() as *const T) };
 
             // Return the index to the free queue after we've read the value.
             critical_section::with(|cs| {
+                println!("Pushing slot into free queue");
                 assert!(!self.0.access(cs).freeq.is_full());
                 unsafe { self.0.access(cs).freeq.push_back_unchecked(rs) }
+                println!(
+                    "Pushed to free queue. freeq_full: {}, freeq_empty: {}",
+                    self.0.access(cs).freeq.is_full(),
+                    self.0.access(cs).freeq.is_empty()
+                );
             });
 
             fence(Ordering::SeqCst);
 
+            println!("Attempting to pop wait queue");
+
             // If someone is waiting in the WaiterQueue, wake the first one up.
             if let Some(wait_head) = self.0.wait_queue.pop() {
+                println!("Popped wait queue.");
                 wait_head.wake();
             }
 
+            println!("Done receiving");
             Ok(r)
         } else if self.is_closed() {
             Err(ReceiveError::NoSender)
@@ -470,6 +512,7 @@ impl<'a, T, const N: usize> Receiver<'a, T, N> {
             // Try to dequeue.
             match self.try_recv() {
                 Ok(val) => {
+                    println!("Done receiving");
                     return Poll::Ready(Ok(val));
                 }
                 Err(ReceiveError::NoSender) => {
@@ -536,6 +579,8 @@ mod loom_tests {
 
         loom::model(|| {
             let (mut spam_tx_send, mut spam_tx_recv) = make_loom_channel!([u8; 20], 1);
+
+            println!("{:#?}", spam_tx_recv);
 
             spam_tx_send.try_send([1; 20]).unwrap();
 

@@ -1,0 +1,619 @@
+ INFO loom::model: 
+ INFO loom::model:  ================== Iteration 1 ==================
+ INFO loom::model: 
+TRACE iter{1}: loom::rt::atomic: Atomic::new state=Ref<loom::rt::atomic::State>(1)
+TRACE iter{1}: loom::rt::atomic: Atomic::new state=Ref<loom::rt::atomic::State>(2)
+Receiver(
+    Channel {
+        freeq: [
+            0,
+        ],
+        readyq: [],
+        slots: [
+            UnsafeCell { .. },
+        ],
+        wait_queue: DoublyLinkedList {
+            head: Atomic {
+                state: Atomic {
+                    state: Ref<loom::rt::atomic::State>(1),
+                    _p: PhantomData<fn() -> *mut rtic_common::wait_queue::Link<core::task::wake::Waker>>,
+                },
+            },
+            tail: Atomic {
+                state: Atomic {
+                    state: Ref<loom::rt::atomic::State>(2),
+                    _p: PhantomData<fn() -> *mut rtic_common::wait_queue::Link<core::task::wake::Waker>>,
+                },
+            },
+        },
+        receiver_dropped: false,
+        num_senders: 1,
+    },
+)
+TRACE iter{1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(1) action=Load
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::try_with
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::new state=Ref<loom::rt::mutex::State>(4) seq_cst=true
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Done sending
+TRACE iter{1}:thread{id=0}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(5) seq_cst=true spurious=false
+TRACE iter{1}:thread{id=0}: loom::rt: spawn thread=Id(1)
+TRACE iter{1}:thread{id=0}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(6) seq_cst=false spurious=true
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(7) location=rtic-sync/src/channel.rs:595:13
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(7) action=RefInc
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::ref_inc state=Ref<loom::rt::arc::State>(7) ref_cnt=2 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs:154:16
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Popping ready slot
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Found ready slot
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+Pushing slot into free queue
+Pushed to free queue. freeq_full: true, freeq_empty: false
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Attempting to pop wait queue
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+ INFO iter{1}:thread{id=1}: loom::rt::execution: ~~~~~~~~ THREAD 1 ~~~~~~~~
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=true
+TRACE iter{1}:thread{id=1}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(8) seq_cst=false spurious=true
+TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(9) location=rtic-sync/src/channel.rs:589:17
+Start sending
+Link ptr: 0x7f428f2a6510
+Sending poll
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::try_with
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+Acquired CS
+Entered critical section
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(1) action=Load
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+Send check: wq_empty: true. freeq_full: true, freeq_empty: false, empty: false
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+Acquired CS
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::notify::State>(6) action=Opaque
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(7) action=RefDec
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::ref_dec state=Ref<loom::rt::arc::State>(7) ref_cnt=1 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:523:1
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Done sending
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(9) action=RefDec
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::ref_dec state=Ref<loom::rt::arc::State>(9) ref_cnt=0 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:523:1
+TRACE iter{1}:thread{id=1}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(11) seq_cst=false spurious=true
+TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(12) location=rtic-sync/src/channel.rs:591:17
+Start sending
+Link ptr: 0x7f428f2a6510
+Sending poll
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+Acquired CS
+Entered critical section
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(1) action=Load
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(12) action=RefInc
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::arc: Arc::ref_inc state=Ref<loom::rt::arc::State>(12) ref_cnt=2 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs:154:16
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::new state=Ref<loom::rt::atomic::State>(13)
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::new state=Ref<loom::rt::atomic::State>(14)
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::new state=Ref<loom::rt::atomic::State>(15)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. true
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquired CS (nested)
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(2) action=Load
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(2) ordering=Relaxed
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(2) action=Store
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::store state=Ref<loom::rt::atomic::State>(2) ordering=Relaxed
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(1) action=Store
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::store state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+Releasing CS (nested: true)
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::notify: Notify::wait 1 state=Ref<loom::rt::notify::State>(11) notified=false spurious=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::notify::State>(11) is_locked=true
+ INFO iter{1}:thread{id=0}: loom::rt::execution: ~~~~~~~~ THREAD 0 ~~~~~~~~
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=true
+Acquired CS
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(1) action=Load
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+Head pointer: 0x7f428f2a6510
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(13) action=Load
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(13) ordering=Relaxed
+Head ref next: Atomic { state: Atomic { state: Ref<loom::rt::atomic::State>(13), _p: PhantomData<fn() -> *mut rtic_common::wait_queue::Link<core::task::wake::Waker>> } }. Value: 0x0
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(1) action=Store
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::store state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(12) action=RefInc
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::ref_inc state=Ref<loom::rt::arc::State>(12) ref_cnt=3 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs:154:16
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(2) action=Load
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(2) ordering=Relaxed
+Tail: 0x7f428f2a6510
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(2) action=Store
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::store state=Ref<loom::rt::atomic::State>(2) ordering=Relaxed
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(13) action=Load
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(13) ordering=Relaxed
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(13) action=Store
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::store state=Ref<loom::rt::atomic::State>(13) ordering=Relaxed
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(14) action=Store
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::store state=Ref<loom::rt::atomic::State>(14) ordering=Relaxed
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(15) action=Store
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::atomic: Atomic::store state=Ref<loom::rt::atomic::State>(15) ordering=Relaxed
+Head ref popped value: AtomicBool(Atomic { state: Atomic { state: Ref<loom::rt::atomic::State>(15), _p: PhantomData<fn() -> bool> } })
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Popped wait queue.
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::notify::State>(11) action=Opaque
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt::notify: Notify::notify state=Ref<loom::rt::notify::State>(11) thread=Id(1)
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(12) action=RefDec
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::ref_dec state=Ref<loom::rt::arc::State>(12) ref_cnt=2 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:523:1
+Done receiving
+Done receiving
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(7) action=RefDec
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::ref_dec state=Ref<loom::rt::arc::State>(7) ref_cnt=0 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:523:1
+TRACE iter{1}:thread{id=0}: loom::rt::notify: Notify::new state=Ref<loom::rt::notify::State>(16) seq_cst=false spurious=true
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::new state=Ref<loom::rt::arc::State>(17) location=rtic-sync/src/channel.rs:598:13
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::arc::State>(17) action=RefInc
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=0}: loom::rt::arc: Arc::ref_inc state=Ref<loom::rt::arc::State>(17) ref_cnt=2 location=/home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs:154:16
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Popping ready slot
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt: branch switch=false
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Found ready slot
+TRACE iter{1}:thread{id=0}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt: synchronize
+TRACE iter{1}:thread{id=0}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=0}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+ INFO iter{1}:thread{id=1}: loom::rt::execution: ~~~~~~~~ THREAD 1 ~~~~~~~~
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=true
+TRACE iter{1}:thread{id=1}: loom::rt::notify: Notify::wait 2 state=Ref<loom::rt::notify::State>(11)
+Sending poll
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+Acquired CS
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+Acquired CS
+Entered critical section
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(1) action=Load
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(1) ordering=Relaxed
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_action obj=Ref<loom::rt::atomic::State>(15) action=Load
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::atomic: Atomic::load state=Ref<loom::rt::atomic::State>(15) ordering=Relaxed
+Send check: wq_empty: true. freeq_full: false, freeq_empty: true, empty: true
+
+thread 'channel::loom_tests::a_repro' panicked at rtic-sync/src/channel.rs:365:17:
+assertion failed: !self.0.access(cs).freeq.is_empty()
+stack backtrace:
+   0: rust_begin_unwind
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:692:5
+   1: core::panicking::panic_fmt
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:75:14
+   2: core::panicking::panic
+             at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:145:5
+   3: rtic_sync::channel::Sender<T,_>::send::{{closure}}::{{closure}}::{{closure}}
+             at ./src/channel.rs:365:17
+   4: critical_section::with
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/critical-section-1.1.2/src/lib.rs:229:14
+   5: rtic_sync::channel::Sender<T,_>::send::{{closure}}::{{closure}}
+             at ./src/channel.rs:328:29
+   6: <core::future::poll_fn::PollFn<F> as core::future::future::Future>::poll
+             at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/future/poll_fn.rs:151:9
+   7: rtic_sync::channel::Sender<T,_>::send::{{closure}}
+             at ./src/channel.rs:379:10
+   8: loom::future::block_on
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/future/mod.rs:35:15
+   9: rtic_sync::channel::loom_tests::a_repro::{{closure}}::{{closure}}
+             at ./src/channel.rs:591:17
+  10: loom::thread::spawn_internal::{{closure}}
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/thread.rs:168:47
+  11: loom::rt::spawn::{{closure}}
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/rt/mod.rs:78:13
+  12: core::ops::function::FnOnce::call_once{{vtable.shim}}
+             at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+  13: <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once
+             at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/boxed.rs:1993:9
+  14: loom::rt::scheduler::spawn_thread::{{closure}}
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/rt/scheduler.rs:142:17
+  15: core::ops::function::FnOnce::call_once
+             at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+  16: generator::gen_impl::GeneratorImpl<A,T>::init_code::{{closure}}
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/gen_impl.rs:357:21
+  17: generator::stack::StackBox<F>::call_once
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/stack/mod.rs:137:13
+  18: generator::stack::Func::call_once
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/stack/mod.rs:119:9
+  19: generator::detail::gen::gen_init_impl::{{closure}}
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:35:9
+  20: core::ops::function::FnOnce::call_once
+             at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+  21: std::panicking::try::do_call
+             at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panicking.rs:584:40
+  22: __rust_try
+  23: std::panicking::try
+             at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panicking.rs:547:19
+  24: std::panic::catch_unwind
+             at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panic.rs:358:14
+  25: generator::detail::gen::catch_unwind_filter
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:23:5
+  26: generator::detail::gen::gen_init_impl
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:50:25
+  27: generator::detail::asm::gen_init
+             at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/x86_64_unix.rs:8:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+Releasing CS (nested: false)
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::release_lock state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::thread: LocalKey::get
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+Acquiring CS. false
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt: synchronize
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::is_locked state=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt::object: Object::branch_acquire obj=Ref<loom::rt::mutex::State>(4) is_locked=false
+TRACE iter{1}:thread{id=1}: loom::rt: branch switch=false
+TRACE iter{1}:thread{id=1}: loom::rt::mutex: Mutex::post_acquire state=Ref<loom::rt::mutex::State>(4) thread=Id(0)
+
+thread 'channel::loom_tests::a_repro' panicked at rtic-common/src/loom_cs.rs:35:44:
+called `Result::unwrap()` on an `Err` value: PoisonError { .. }
+stack backtrace:
+   0:     0x55b49f669b1a - std::backtrace_rs::backtrace::libunwind::trace::h88deb10bd0145eb8
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/../../backtrace/src/backtrace/libunwind.rs:116:5
+   1:     0x55b49f669b1a - std::backtrace_rs::backtrace::trace_unsynchronized::he1036f5481c14dff
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/../../backtrace/src/backtrace/mod.rs:66:5
+   2:     0x55b49f669b1a - std::sys::backtrace::_print_fmt::hecc345b6e70c4b20
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/sys/backtrace.rs:66:9
+   3:     0x55b49f669b1a - <std::sys::backtrace::BacktraceLock::print::DisplayBacktrace as core::fmt::Display>::fmt::he089f96442833f67
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/sys/backtrace.rs:39:26
+   4:     0x55b49f691433 - core::fmt::rt::Argument::fmt::h1f77cded99c71a14
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/fmt/rt.rs:177:76
+   5:     0x55b49f691433 - core::fmt::write::h2f210ed4c94745cb
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/fmt/mod.rs:1440:21
+   6:     0x55b49f666903 - std::io::Write::write_fmt::h7de08171ab770fb2
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/io/mod.rs:1887:15
+   7:     0x55b49f669962 - std::sys::backtrace::BacktraceLock::print::h810fbd31421329e6
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/sys/backtrace.rs:42:9
+   8:     0x55b49f66b050 - std::panicking::default_hook::{{closure}}::hbaad47ed9dc6356d
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:295:22
+   9:     0x55b49f66ae30 - std::panicking::default_hook::h24e207139139d40a
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:322:9
+  10:     0x55b49f625a43 - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::hbb6e385849f943e5
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/boxed.rs:2007:9
+  11:     0x55b49f625fd2 - generator::detail::gen::catch_unwind_filter::{{closure}}::{{closure}}::hbc5db465dbec9a0b
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:19:13
+  12:     0x55b49f66b883 - <alloc::boxed::Box<F,A> as core::ops::function::Fn<Args>>::call::h3af32c23caf5c679
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/alloc/src/boxed.rs:2007:9
+  13:     0x55b49f66b883 - std::panicking::rust_panic_with_hook::ha9131beeb2ddc506
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:836:13
+  14:     0x55b49f66b55a - std::panicking::begin_panic_handler::{{closure}}::h1bba0eaeb6da506f
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:701:13
+  15:     0x55b49f66a019 - std::sys::backtrace::__rust_end_short_backtrace::h1d1ca3eade483f4c
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/sys/backtrace.rs:168:18
+  16:     0x55b49f66b1ed - rust_begin_unwind
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/std/src/panicking.rs:692:5
+  17:     0x55b49f32ede0 - core::panicking::panic_fmt::h896a0727a1a943f9
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/panicking.rs:75:14
+  18:     0x55b49f32f256 - core::result::unwrap_failed::h1b5ed8541c7bebd6
+                               at /rustc/4d91de4e48198da2e33413efdcd9cd2cc0c46688/library/core/src/result.rs:1704:5
+  19:     0x55b49f39d0f3 - core::result::Result<T,E>::unwrap::hca02d86e9878b64d
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs:1109:23
+  20:     0x55b49f39d0f3 - loom::sync::mutex::Mutex<T>::lock::h7083de49ea7c2969
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/sync/mutex.rs:43:24
+  21:     0x55b49f39d2a0 - <rtic_common::loom_cs::StdCriticalSection as critical_section::Impl>::acquire::{{closure}}::hf8a9ae28a4cee61b
+                               at /home/jona/projects/rtic/rtic-common/src/loom_cs.rs:35:31
+  22:     0x55b49f39bbbc - loom::thread::LocalKey<T>::try_with::hbc67081b15958d9c
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/thread.rs:280:12
+  23:     0x55b49f39b77f - loom::thread::LocalKey<T>::with::hcd623f4a6a907666
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/thread.rs:256:9
+  24:     0x55b49f39508e - <rtic_common::loom_cs::StdCriticalSection as critical_section::Impl>::acquire::hc61f8bb602394268
+                               at /home/jona/projects/rtic/rtic-common/src/loom_cs.rs:21:9
+  25:     0x55b49f395277 - _critical_section_1_0_acquire
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/critical-section-1.1.2/src/lib.rs:282:13
+  26:     0x55b49f33e0a0 - critical_section::acquire::h26686b4649f61f06
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/critical-section-1.1.2/src/lib.rs:183:18
+  27:     0x55b49f33e0a0 - critical_section::with::h9bf2a07e9fab9ea6
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/critical-section-1.1.2/src/lib.rs:226:26
+  28:     0x55b49f34eff3 - rtic_common::wait_queue::Link<T>::remove_from_list::h42658243256981b6
+                               at /home/jona/projects/rtic/rtic-common/src/wait_queue.rs:174:9
+  29:     0x55b49f3346a9 - rtic_sync::channel::Sender<T,_>::send::{{closure}}::{{closure}}::h5ab51650db462a58
+                               at /home/jona/projects/rtic/rtic-sync/src/channel.rs:316:17
+  30:     0x55b49f342a1e - <rtic_common::dropper::OnDrop<F> as core::ops::drop::Drop>::drop::ha040c44f9da42897
+                               at /home/jona/projects/rtic/rtic-common/src/dropper.rs:24:18
+  31:     0x55b49f341d6a - core::ptr::drop_in_place<rtic_common::dropper::OnDrop<rtic_sync::channel::Sender<[u8; 20],1_usize>::send::{{closure}}::{{closure}}>>::hdfbeb4a673a07fff
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs:523:1
+  32:     0x55b49f334618 - rtic_sync::channel::Sender<T,_>::send::{{closure}}::h061c2c87937ae4a6
+                               at /home/jona/projects/rtic/rtic-sync/src/channel.rs:391:5
+  33:     0x55b49f3507b4 - loom::future::block_on::ha0eb5f5b272efa95
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/future/mod.rs:35:15
+  34:     0x55b49f34a009 - rtic_sync::channel::loom_tests::a_repro::{{closure}}::{{closure}}::hdd1a21a2fa256bea
+                               at /home/jona/projects/rtic/rtic-sync/src/channel.rs:591:17
+  35:     0x55b49f33afa0 - loom::thread::spawn_internal::{{closure}}::h6d725362ce254480
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/thread.rs:168:47
+  36:     0x55b49f344d8c - loom::rt::spawn::{{closure}}::h5c2f83cd2c1d3bb4
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/rt/mod.rs:78:13
+  37:     0x55b49f34181e - core::ops::function::FnOnce::call_once{{vtable.shim}}::h03200ccdce94a1ef
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+  38:     0x55b49f3ccc58 - <alloc::boxed::Box<F,A> as core::ops::function::FnOnce<Args>>::call_once::h9ee30823f6f06bd9
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/boxed.rs:1993:9
+  39:     0x55b49f3aa3f9 - loom::rt::scheduler::spawn_thread::{{closure}}::h2064432b3e871336
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/loom-0.7.2/src/rt/scheduler.rs:142:17
+  40:     0x55b49f3d2e5e - core::ops::function::FnOnce::call_once::h4163d008bbb31ccb
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+  41:     0x55b49f3d172f - generator::gen_impl::GeneratorImpl<A,T>::init_code::{{closure}}::hd869930e49d6d1b6
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/gen_impl.rs:357:21
+  42:     0x55b49f3dd3c1 - generator::stack::StackBox<F>::call_once::h18cef3f3e587df48
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/stack/mod.rs:137:13
+  43:     0x55b49f6277ed - generator::stack::Func::call_once::h842c4d852216e38f
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/stack/mod.rs:119:9
+  44:     0x55b49f62612c - generator::detail::gen::gen_init_impl::{{closure}}::h17e991055ffeaafa
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:35:9
+  45:     0x55b49f6236d3 - core::ops::function::FnOnce::call_once::hcd6ed86177c82cd9
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+  46:     0x55b49f622c2f - std::panicking::try::do_call::h3e2ef31d7886675a
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panicking.rs:584:40
+  47:     0x55b49f6283bb - __rust_try
+  48:     0x55b49f6228d0 - std::panicking::try::ha19239bbd81c6b57
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panicking.rs:547:19
+  49:     0x55b49f6228d0 - std::panic::catch_unwind::h8267862a8f123643
+                               at /home/jona/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panic.rs:358:14
+  50:     0x55b49f625e9d - generator::detail::gen::catch_unwind_filter::h370b30ac7dabdd5f
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:23:5
+  51:     0x55b49f626014 - generator::detail::gen::gen_init_impl::hbf8c022de77d9040
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/gen.rs:50:25
+  52:     0x55b49f625cc3 - generator::detail::asm::gen_init::h094f18dd176af6c6
+                               at /home/jona/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generator-0.8.4/src/detail/x86_64_unix.rs:8:5
+  53:                0x0 - <unknown>
+
+thread 'channel::loom_tests::a_repro' panicked at library/core/src/panicking.rs:226:5:
+panic in a destructor during cleanup
+thread caused non-unwinding panic. aborting.
+error: test failed, to rerun pass `--lib`
+
+Caused by:
+  process didn't exit successfully: `/home/jona/projects/rtic/target/debug/deps/rtic_sync-a0648e4949e677f1 --nocapture` (signal: 6, SIGABRT: process abort signal)

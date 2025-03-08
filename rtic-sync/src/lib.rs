@@ -1,6 +1,6 @@
 //! Synchronization primitives for asynchronous contexts.
 
-#![no_std]
+// #![no_std]
 #![deny(missing_docs)]
 
 #[cfg(feature = "defmt-03")]
