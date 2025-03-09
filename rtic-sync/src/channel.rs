@@ -430,32 +430,33 @@ pub enum ReceiveError {
 impl<'a, T, const N: usize> Receiver<'a, T, N> {
     /// Receives a value if there is one in the channel, non-blocking.
     pub fn try_recv(&mut self) -> Result<T, ReceiveError> {
-        // Try to get a ready slot.
-        let ready_slot = critical_section::with(|cs| self.0.access(cs).readyq.pop_front());
+        critical_section::with(|cs| {
+            // Try to get a ready slot.
+            let ready_slot = self.0.access(cs).readyq.pop_front();
 
-        if let Some(rs) = ready_slot {
-            // Read the value from the slots, note; this memcpy is not under a critical section.
-            let r = unsafe { ptr::read(self.0.slots.get_unchecked(rs as usize).get() as *const T) };
+            if let Some(rs) = ready_slot {
+                // Read the value from the slots, note; this memcpy is not under a critical section.
+                let r =
+                    unsafe { ptr::read(self.0.slots.get_unchecked(rs as usize).get() as *const T) };
 
-            // Return the index to the free queue after we've read the value.
-            critical_section::with(|cs| {
+                // Return the index to the free queue after we've read the value.
                 assert!(!self.0.access(cs).freeq.is_full());
                 unsafe { self.0.access(cs).freeq.push_back_unchecked(rs) }
-            });
 
-            fence(Ordering::SeqCst);
+                fence(Ordering::SeqCst);
 
-            // If someone is waiting in the WaiterQueue, wake the first one up.
-            if let Some(wait_head) = self.0.wait_queue.pop() {
-                wait_head.wake();
+                // If someone is waiting in the WaiterQueue, wake the first one up.
+                if let Some(wait_head) = self.0.wait_queue.pop() {
+                    wait_head.wake();
+                }
+
+                Ok(r)
+            } else if self.is_closed() {
+                Err(ReceiveError::NoSender)
+            } else {
+                Err(ReceiveError::Empty)
             }
-
-            Ok(r)
-        } else if self.is_closed() {
-            Err(ReceiveError::NoSender)
-        } else {
-            Err(ReceiveError::Empty)
-        }
+        })
     }
 
     /// Receives a value, waiting if the queue is empty.
