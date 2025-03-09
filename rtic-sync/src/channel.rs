@@ -1,7 +1,6 @@
 //! An async aware MPSC channel that can be used on no-alloc systems.
 
 use core::{
-    cell::UnsafeCell,
     future::poll_fn,
     mem::MaybeUninit,
     pin::Pin,
@@ -9,6 +8,12 @@ use core::{
     sync::atomic::{fence, Ordering},
     task::{Poll, Waker},
 };
+
+#[cfg(not(feature = "loom"))]
+use core::cell::UnsafeCell;
+
+#[cfg(feature = "loom")]
+use loom::cell::UnsafeCell;
 
 #[doc(hidden)]
 pub use critical_section;
@@ -43,34 +48,14 @@ pub struct Channel<T, const N: usize> {
     num_senders: UnsafeCell<usize>,
 }
 
-impl<T: std::fmt::Debug, const N: usize> std::fmt::Debug for Channel<T, N> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        // SAFETY: not :)
-        f.debug_struct("Channel")
-            .field("freeq", unsafe { &*self.freeq.get() })
-            .field("readyq", unsafe { &*self.readyq.get() })
-            .field("slots", &self.slots)
-            .field("wait_queue", &self.wait_queue)
-            .field("receiver_dropped", unsafe { &*self.receiver_dropped.get() })
-            .field("num_senders", unsafe { &*self.num_senders.get() })
-            .finish()
-    }
-}
-
 unsafe impl<T, const N: usize> Send for Channel<T, N> {}
 
 unsafe impl<T, const N: usize> Sync for Channel<T, N> {}
 
-struct UnsafeAccess<'a, const N: usize> {
-    freeq: &'a mut Deque<u8, N>,
-    readyq: &'a mut Deque<u8, N>,
-    receiver_dropped: &'a mut bool,
-    num_senders: &'a mut usize,
-}
-
 impl<T, const N: usize> Channel<T, N> {
     const _CHECK: () = assert!(N < 256, "This queue support a maximum of 255 entries");
 
+    #[cfg(not(feature = "loom"))]
     const INIT_SLOTS: UnsafeCell<MaybeUninit<T>> = UnsafeCell::new(MaybeUninit::uninit());
 
     /// Create a new channel.
@@ -94,7 +79,7 @@ impl<T, const N: usize> Channel<T, N> {
             freeq: UnsafeCell::new(Deque::new()),
             readyq: UnsafeCell::new(Deque::new()),
             receiver_waker: WakerRegistration::new(),
-            slots: [Self::INIT_SLOTS; N],
+            slots: core::array::from_fn(|_| UnsafeCell::new(MaybeUninit::uninit())),
             wait_queue: WaitQueue::new(),
             receiver_dropped: UnsafeCell::new(false),
             num_senders: UnsafeCell::new(0),
@@ -105,32 +90,67 @@ impl<T, const N: usize> Channel<T, N> {
     pub fn split(&mut self) -> (Sender<'_, T, N>, Receiver<'_, T, N>) {
         // Fill free queue
         for idx in 0..N as u8 {
-            assert!(!self.freeq.get_mut().is_full());
+            self.freeq.with_mut(|freeq| {
+                let freeq = unsafe { &mut *freeq };
+                assert!(!freeq.is_full());
 
-            // SAFETY: This safe as the loop goes from 0 to the capacity of the underlying queue.
-            unsafe {
-                self.freeq.get_mut().push_back_unchecked(idx);
-            }
+                // SAFETY: This safe as the loop goes from 0 to the capacity of the underlying queue.
+                unsafe {
+                    freeq.push_back_unchecked(idx);
+                }
+            });
         }
 
-        assert!(self.freeq.get_mut().is_full());
+        self.freeq.with(|freeq| {
+            assert!(unsafe { &*freeq }.is_full());
+        });
 
         // There is now 1 sender
-        *self.num_senders.get_mut() = 1;
+        self.num_senders.get_mut().with(|v| unsafe {
+            *v = 1;
+        });
 
         (Sender(self), Receiver(self))
     }
 
-    fn access<'a>(&'a self, _cs: critical_section::CriticalSection) -> UnsafeAccess<'a, N> {
-        // SAFETY: This is safe as are in a critical section.
-        unsafe {
-            UnsafeAccess {
-                freeq: &mut *self.freeq.get(),
-                readyq: &mut *self.readyq.get(),
-                receiver_dropped: &mut *self.receiver_dropped.get(),
-                num_senders: &mut *self.num_senders.get(),
-            }
-        }
+    fn freeq<F, R>(&self, _cs: critical_section::CriticalSection, f: F) -> R
+    where
+        F: FnOnce(&mut Deque<u8, N>) -> R,
+    {
+        self.freeq.with_mut(|freeq| {
+            let queue = unsafe { &mut *freeq };
+            f(queue)
+        })
+    }
+
+    fn readyq<F, R>(&self, _cs: critical_section::CriticalSection, f: F) -> R
+    where
+        F: FnOnce(&mut Deque<u8, N>) -> R,
+    {
+        self.readyq.with_mut(|readyq| {
+            let queue = unsafe { &mut *readyq };
+            f(queue)
+        })
+    }
+
+    fn receiver_dropped<F, R>(&self, _cs: critical_section::CriticalSection, f: F) -> R
+    where
+        F: FnOnce(&mut bool) -> R,
+    {
+        self.receiver_dropped.with_mut(|receiver_dropped| {
+            let receiver_dropped = unsafe { &mut *receiver_dropped };
+            f(receiver_dropped)
+        })
+    }
+
+    fn num_senders<F, R>(&self, _cs: critical_section::CriticalSection, f: F) -> R
+    where
+        F: FnOnce(&mut usize) -> R,
+    {
+        self.num_senders.with_mut(|num_senders| {
+            let num_senders = unsafe { &mut *num_senders };
+            f(num_senders)
+        })
     }
 }
 
@@ -257,8 +277,8 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
 
         // Write the value into the ready queue.
         critical_section::with(|cs| {
-            assert!(!self.0.access(cs).readyq.is_full());
-            unsafe { self.0.access(cs).readyq.push_back_unchecked(idx) }
+            assert!(!self.0.readyq(cs, |q| q.is_full()));
+            unsafe { self.0.readyq(cs, |q| q.push_back_unchecked(idx)) }
         });
 
         fence(Ordering::SeqCst);
@@ -282,7 +302,7 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
         }
 
         let idx =
-            if let Some(idx) = critical_section::with(|cs| self.0.access(cs).freeq.pop_front()) {
+            if let Some(idx) = critical_section::with(|cs| self.0.freeq(cs, |q| q.pop_front())) {
                 idx
             } else {
                 return Err(TrySendError::Full(val));
@@ -328,15 +348,21 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
                 println!("Send poll: Entered critical section");
 
                 let wq_empty = self.0.wait_queue.is_empty();
-                let fq_empty = self.0.access(cs).freeq.is_empty();
+                let fq_empty = self.0.freeq(cs, |q| q.is_empty());
 
-                println!(
-                    "Send check: wq_empty: {wq_empty}. empty: {}, link_is_some: {}, freeq: {:?}, readyq: {:?}",
-                    fq_empty,
-                    unsafe { link_ptr.get() }.is_some(),
-                    self.0.access(cs).freeq,
-                    self.0.access(cs).readyq
-                );
+                self.0.freeq(cs, |freeq| {
+                    self.0.readyq(cs, |readyq| {
+                        println!(
+                            "Send check: wq_empty: {wq_empty}. empty: {}, link_is_some: {}, freeq: {:?}, readyq: {:?}",
+                            fq_empty,
+                            unsafe { link_ptr.get() }.is_some(),
+                            freeq,
+                            readyq
+                        );
+                    })
+                });
+
+
 
                 if !wq_empty || fq_empty {
                     // SAFETY: This pointer is only dereferenced here and on drop of the future
@@ -369,9 +395,9 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
                     }
                 }
 
-                assert!(!self.0.access(cs).freeq.is_empty());
+                assert!(!self.0.freeq(cs, |q| q.is_empty()));
                 // Get index as the queue is guaranteed not empty and the wait queue is empty
-                let idx = unsafe { self.0.access(cs).freeq.pop_front_unchecked() };
+                let idx = unsafe { self.0.freeq(cs, |q| q.pop_front_unchecked()) };
 
                 Some(idx)
             });
@@ -399,17 +425,17 @@ impl<'a, T, const N: usize> Sender<'a, T, N> {
 
     /// Returns true if there is no `Receiver`s.
     pub fn is_closed(&self) -> bool {
-        critical_section::with(|cs| *self.0.access(cs).receiver_dropped)
+        critical_section::with(|cs| self.0.receiver_dropped(cs, |v| *v))
     }
 
     /// Is the queue full.
     pub fn is_full(&self) -> bool {
-        critical_section::with(|cs| self.0.access(cs).freeq.is_empty())
+        critical_section::with(|cs| self.0.freeq(cs, |q| q.is_empty()))
     }
 
     /// Is the queue empty.
     pub fn is_empty(&self) -> bool {
-        critical_section::with(|cs| self.0.access(cs).freeq.is_full())
+        critical_section::with(|cs| self.0.freeq(cs, |q| q.is_full()))
     }
 }
 
@@ -417,9 +443,10 @@ impl<'a, T, const N: usize> Drop for Sender<'a, T, N> {
     fn drop(&mut self) {
         // Count down the reference counter
         let num_senders = critical_section::with(|cs| {
-            *self.0.access(cs).num_senders -= 1;
-
-            *self.0.access(cs).num_senders
+            self.0.num_senders(cs, |v| {
+                *v -= 1;
+                *v
+            })
         });
 
         // If there are no senders, wake the receiver to do error handling.
@@ -432,7 +459,7 @@ impl<'a, T, const N: usize> Drop for Sender<'a, T, N> {
 impl<'a, T, const N: usize> Clone for Sender<'a, T, N> {
     fn clone(&self) -> Self {
         // Count up the reference counter
-        critical_section::with(|cs| *self.0.access(cs).num_senders += 1);
+        critical_section::with(|cs| self.0.num_senders(cs, |v| *v += 1));
 
         Self(self.0)
     }
@@ -441,7 +468,6 @@ impl<'a, T, const N: usize> Clone for Sender<'a, T, N> {
 // -------- Receiver
 
 /// A receiver of the channel. There can only be one receiver at any time.
-#[derive(Debug)]
 pub struct Receiver<'a, T, const N: usize>(&'a Channel<T, N>);
 
 unsafe impl<'a, T, const N: usize> Send for Receiver<'a, T, N> {}
@@ -468,7 +494,7 @@ impl<'a, T, const N: usize> Receiver<'a, T, N> {
     pub fn try_recv(&mut self) -> Result<T, ReceiveError> {
         println!("Popping ready slot.");
         // Try to get a ready slot.
-        let ready_slot = critical_section::with(|cs| self.0.access(cs).readyq.pop_front());
+        let ready_slot = critical_section::with(|cs| self.0.readyq(cs, |q| q.pop_front()));
 
         if let Some(rs) = ready_slot {
             println!("Found ready slot");
@@ -482,13 +508,15 @@ impl<'a, T, const N: usize> Receiver<'a, T, N> {
             // Return the index to the free queue after we've read the value.
             critical_section::with(|cs| {
                 println!("Pushing slot into free queue");
-                assert!(!self.0.access(cs).freeq.is_full());
-                unsafe { self.0.access(cs).freeq.push_back_unchecked(rs) }
-                println!(
-                    "Pushed to free queue. freeq_full: {}, freeq_empty: {}",
-                    self.0.access(cs).freeq.is_full(),
-                    self.0.access(cs).freeq.is_empty()
-                );
+                self.0.freeq(cs, |freeq| {
+                    assert!(!freeq.is_full());
+                    unsafe { freeq.push_back_unchecked(rs) }
+                    println!(
+                        "Pushed to free queue. freeq_full: {}, freeq_empty: {}",
+                        freeq.is_full(),
+                        freeq.is_empty()
+                    );
+                });
             });
 
             fence(Ordering::SeqCst);
@@ -538,24 +566,24 @@ impl<'a, T, const N: usize> Receiver<'a, T, N> {
 
     /// Returns true if there are no `Sender`s.
     pub fn is_closed(&self) -> bool {
-        critical_section::with(|cs| *self.0.access(cs).num_senders == 0)
+        critical_section::with(|cs| self.0.num_senders(cs, |v| *v == 0))
     }
 
     /// Is the queue full.
     pub fn is_full(&self) -> bool {
-        critical_section::with(|cs| self.0.access(cs).readyq.is_full())
+        critical_section::with(|cs| self.0.readyq(cs, |q| q.is_full()))
     }
 
     /// Is the queue empty.
     pub fn is_empty(&self) -> bool {
-        critical_section::with(|cs| self.0.access(cs).readyq.is_empty())
+        critical_section::with(|cs| self.0.readyq(cs, |q| q.is_empty()))
     }
 }
 
 impl<'a, T, const N: usize> Drop for Receiver<'a, T, N> {
     fn drop(&mut self) {
         // Mark the receiver as dropped and wake all waiters
-        critical_section::with(|cs| *self.0.access(cs).receiver_dropped = true);
+        critical_section::with(|cs| self.0.receiver_dropped(cs, |v| *v = true));
 
         while let Some(waker) = self.0.wait_queue.pop() {
             waker.wake();
@@ -589,8 +617,6 @@ mod loom_tests {
 
         loom::model(|| {
             let (mut spam_tx_send, mut spam_tx_recv) = make_loom_channel!([u8; 20], 1);
-
-            println!("{:#?}", spam_tx_recv);
 
             spam_tx_send.try_send([1; 20]).unwrap();
 
